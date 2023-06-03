@@ -15,3 +15,13 @@ aws configure
 3. Create repo
 aws ecr create-repository \
     --repository-name tod
+
+
+Github actions
+Create secrets
+AWS_ACCESS_KEY_ID
+AWS_SECRET_ACCESS_KEY
+
+variables
+AWS_REGION
+ECR_REPOSITORY
