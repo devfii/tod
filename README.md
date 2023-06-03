@@ -16,6 +16,11 @@ aws configure
 aws ecr create-repository \
     --repository-name tod
 
+4. 
+aws ecr put-lifecycle-policy \
+    --repository-name "tod" \
+    --lifecycle-policy-text "file://repository_policy.json"
+
 
 Github actions
 Create secrets
