@@ -43,7 +43,7 @@ jobs:
       run: |
         sed -i 's/AWS_REGION/${{ vars.AWS_REGION }}/g' task_definition.json
         sed -i 's/EXECUTION_ROLE_ARN/${{ secrets.EXECUTION_ROLE_ARN }}/g' task_definition.json
-        sed -i 's/CONTAINER_IMAGE/${{ jobs.build.outputs.image }}/g' task_definition.json
+        sed -i 's/CONTAINER_IMAGE/${{ job.build.outputs.image }}/g' task_definition.json
         cat task_definition.json
       
   #deploy to prod
