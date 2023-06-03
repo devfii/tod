@@ -8,8 +8,12 @@ jobs:
   build:
     runs-on: ubuntu-22.04
     steps:
-    - uses: actions/checkout@v3
-      name: checkout main branch
+    - name: checkout main branch
+      uses: actions/checkout@v3
+    - name: build docker image
+      run: |
+        echo "pass"
+        echo "pass2"
       
       
   #deploy to staging
