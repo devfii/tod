@@ -20,6 +20,7 @@ jobs:
       id: ecr-login
       uses: aws-actions/amazon-ecr-login@v1
     - name: build, tag, push docker image
+      id: build-image
       env: 
         ECR_REGISTRY: ${{ steps.ecr-login.outputs.registry }}
         ECR_REPOSITORY: ${{ vars.ECR_REPOSITORY }}
@@ -28,6 +29,7 @@ jobs:
         docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
         docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
         echo "image=$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG" >> $GITHUB_OUTPUT
+        echo ${{ steps.build-image.outputs.image }}
       
       
   #deploy to staging
