@@ -16,7 +16,7 @@ aws configure
 aws ecr create-repository \
     --repository-name tod
 
-4. 
+4. Create ecr repository policy
 aws ecr put-lifecycle-policy \
     --repository-name "tod" \
     --lifecycle-policy-text "file://repository_policy.json"
