@@ -1,24 +1,17 @@
 {
    "containerDefinitions": [ 
       { 
-         "command": [
-            "/bin/sh -c \"\""
-         ],
-         "entryPoint": [
-            "sh",
-            "-c"
-         ],
          "essential": true,
-         "image": "httpd:2.4",
+         "image": "CONTAINER_IMAGE",
          "logConfiguration": { 
             "logDriver": "awslogs",
             "options": { 
                "awslogs-group" : "/ecs/fargate-task-definition",
-               "awslogs-region": "us-east-1",
+               "awslogs-region": "AWS_REGION",
                "awslogs-stream-prefix": "ecs"
             }
          },
-         "name": "sample-fargate-app",
+         "name": "tod",
          "portMappings": [ 
             { 
                "containerPort": 8000,
@@ -29,8 +22,8 @@
       }
    ],
    "cpu": "256",
-   "executionRoleArn": "arn:aws:iam::012345678910:role/ecsTaskExecutionRole",
-   "family": "fargate-task-definition",
+   "executionRoleArn": "EXECUTION_ROLE_ARN",
+   "family": "tod-def",
    "memory": "512",
    "networkMode": "awsvpc",
    "runtimePlatform": {
