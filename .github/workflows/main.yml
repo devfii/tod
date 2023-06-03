@@ -7,6 +7,8 @@ jobs:
   #build app, test and push to ecr
   build:
     runs-on: ubuntu-22.04
+    outputs:
+      image: ${{ steps.build-image.outputs.image }}
     steps:
     - name: checkout main branch
       uses: actions/checkout@v3
