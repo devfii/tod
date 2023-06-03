@@ -22,6 +22,15 @@ aws ecr put-lifecycle-policy \
     --lifecycle-policy-text "file://repository_policy.json"
 
 
+aws ecs create-cluster \
+--cluster-name   todCluster   --capacity-providers   FARGATE \
+--default-capacity-provider-strategy capacityProvider=FARGATE,weight=1 
+
+
+aws ecs register-task-definition \
+    --cli-input-json file:task_definition.json
+
+
 Github actions
 Create secrets
 AWS_ACCESS_KEY_ID
