@@ -1,5 +1,5 @@
 # syntax=docker/dockerfile:1
-FROM 3.11.3-slim-buster
+FROM python:3.11.3-slim-buster
 
 #set working  directory
 WORKDIR /app
