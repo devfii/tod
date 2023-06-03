@@ -4,9 +4,16 @@ on:
     branches: ["main"]
   
 jobs:
+  #build app, test and push to ecr
   build:
     runs-on: ubuntu-22.04
     steps:
     - uses: actions/checkout@v3
       name: checkout main branch
-    
+      
+      
+  #deploy to staging
+  
+  #deploy to prod
+
+
