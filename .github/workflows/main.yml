@@ -18,6 +18,7 @@ jobs:
         aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
         aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         aws-region: ${{ vars.AWS_REGION }}
+        mask-aws-account-id: 'false'
     - name: login into Amazon ECR
       id: ecr-login
       uses: aws-actions/amazon-ecr-login@v1
@@ -33,20 +34,21 @@ jobs:
         echo "image=$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG" >> "$GITHUB_OUTPUT"
         #echo "out=Bayobab" >> "$GITHUB_OUTPUT"
         #cat "$GITHUB_OUTPUT"
-    - name: find and replace task definition values
-      env:
-          CONTAINER_IMAGE: ${{steps.build-image.outputs.image}}  
-      run: |
-        echo $CONTAINER_IMAGE | sed 's/./& /g'
+
 
   
   #deploy to staging
- # deploy_to_staging:
-  #  runs-on: ubuntu-22.04
-   # needs: build
-    #steps:
-    #- name: checkout main branch
-    #  uses: actions/checkout@v3
+  deploy_to_staging:
+    runs-on: ubuntu-22.04
+    needs: build
+    steps:
+    - name: checkout main branch
+      uses: actions/checkout@v3
+    - name: find and replace task definition values
+      env:
+          CONTAINER_IMAGE: ${{needs.build.outputs.image}}  
+      run: |
+        echo $CONTAINER_IMAGE 
    
 
 
