@@ -9,7 +9,11 @@ jobs:
     steps:
     - name: make var
       id: make_var
-      run: echo "image=${{ secrets.AWS_ACCESS_KEY_ID }}" >> $GITHUB_OUTPUT
+      run: |
+        the_secret="blahblah"
+        echo "::add-mask::$the_secret"
+        echo "image=$the_secret" >> $GITHUB_OUTPUT
+
     
   use_secret:
     runs-on: ubuntu-22.04
