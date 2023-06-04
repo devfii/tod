@@ -1,7 +1,8 @@
 name: CI/CD for TOD app
 on:
-  push:
-    branches: ["main"]
+  #push:
+  #  branches: ["main"]
+  workflow_dispatch
   
 jobs:
   #build app, test and push to ecr
@@ -35,6 +36,8 @@ jobs:
         echo "::add-mask::$image"
         docker push $image
         echo "image=$image" >> "$GITHUB_OUTPUT"
+    - run: |
+        echo ${{ steps.build-image.outputs.image }}
   
   #deploy to staging
   deploy_to_staging:
