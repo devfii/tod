@@ -12,7 +12,7 @@ jobs:
       run: |
         the_secret="blahblah"
         echo $the_secret
-        echo "::add-mask::$the_secret"
+        #echo "::add-mask::$the_secret"
         echo "image=$the_secret" >> $GITHUB_OUTPUT
 
     
