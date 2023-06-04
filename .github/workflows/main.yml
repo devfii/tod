@@ -45,7 +45,7 @@ jobs:
       run: |
         sed -i 's|AWS_REGION|${{ vars.AWS_REGION }}|g; s|EXECUTION_ROLE_ARN|${{ secrets.EXECUTION_ROLE_ARN }}|g; s|CONTAINER_IMAGE|${{ needs.build.outputs.image }}|g' task_definition.json
 
-        cat $GITHUB_OUTPUT
+        cat ${{ needs.build.outputs.image }}
 
       
   #deploy to prod
