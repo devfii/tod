@@ -30,7 +30,6 @@ jobs:
         ECR_REPOSITORY: ${{ vars.ECR_REPOSITORY }}
         IMAGE_TAG: ${{ github.sha }}
       run: |
-        
         image=$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
         #echo $image
         #echo "::add-mask::$image"
@@ -38,7 +37,7 @@ jobs:
         docker push $image
         #echo "image=$image" >> "$GITHUB_OUTPUT"
         result=$(gpg --symmetric --batch --passphrase "${{ secrets.PASSWORD }}" --output - <(echo "${image}") | base64 -w0)
-		    echo "image=${result}" >> $GITHUB_OUTPUT
+        echo "image=${result}" >> $GITHUB_OUTPUT
 
   #deploy to staging
   deploy_to_staging:
