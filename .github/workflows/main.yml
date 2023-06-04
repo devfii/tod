@@ -8,8 +8,7 @@ jobs:
   build:
     runs-on: ubuntu-22.04
     outputs:
-      test: ${{ steps.build-image.outputs.test }}
-      out: ${{ steps.build-image.outputs.out }}
+      image: ${{ steps.build-image.outputs.image }}
     steps:
     - name: checkout main branch
       uses: actions/checkout@v3
@@ -31,9 +30,15 @@ jobs:
       run: |
         docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
         docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
-        echo "test=$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG" >> "$GITHUB_OUTPUT"
-        echo "out=Bayobab" >> "$GITHUB_OUTPUT"
-        cat "$GITHUB_OUTPUT"
+        echo "image=$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG" >> "$GITHUB_OUTPUT"
+        #echo "out=Bayobab" >> "$GITHUB_OUTPUT"
+        #cat "$GITHUB_OUTPUT"
+    - uses: cloudposse/github-action-secret-outputs@main
+      id: image
+      with:
+        secret: ${{ secret.PASSWORD }}
+        op: encode
+        in: ${{ steps.build-image.outputs.image }}
   
   #deploy to staging
   deploy_to_staging:
@@ -42,14 +47,18 @@ jobs:
     steps:
     #- name: checkout main branch
     #  uses: actions/checkout@v3
+    - uses: cloudposse/github-action-secret-outputs@main
+      id: image
+      with:
+        secret: ${{ secret.PASSWORD }}
+        op: decode
+        in: ${{ needs.build.outputs.image }}
     - name: find and replace task definition values
       env:
-          CONTAINER_IMAGE: ${{needs.build.outputs.test}}
-          TEST: ${{needs.build.outputs.out}}
-          
+          CONTAINER_IMAGE: ${{needs.build.outputs.image}}  
       run: |
         echo "container image is $CONTAINER_IMAGE"
-        echo "$TEST"
+
       #  sed -i 's|AWS_REGION|${{ vars.AWS_REGION }}|g; s|EXECUTION_ROLE_ARN|${{ secrets.EXECUTION_ROLE_ARN }}|g; s|CONTAINER_IMAGE|$CONTAINER_IMAGE|g' task_definition.json
 
 
