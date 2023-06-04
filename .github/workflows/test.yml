@@ -13,8 +13,7 @@ jobs:
         the_secret="blahblah"
         echo $the_secret
         echo "::add-mask::$the_secret"
-        echo "::set-output name=image::$the_secret"
-        #echo "image=$the_secret" >> $GITHUB_OUTPUT
+        echo "image=$the_secret" >> $GITHUB_OUTPUT
     - name: use var
       run: echo ${{ steps.make_var.outputs.image}}
     
