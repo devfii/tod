@@ -9,7 +9,7 @@ jobs:
     steps:
     - name: make var
       id: make_var
-      run: echo "image=blahblah" >> $GITHUB_OUTPUT
+      run: echo "image=${{ secrets.AWS_ACCESS_KEY_ID }}" >> $GITHUB_OUTPUT
     
   use_secret:
     runs-on: ubuntu-22.04
