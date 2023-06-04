@@ -57,7 +57,7 @@ jobs:
       uses: aws-actions/amazon-ecs-render-task-definition@v1
       with:
         task-definition: task_definition.json
-        container-name: my-container
+        container-name: tod
         image: ${{ steps.image-tag.outputs.image }}
     
     - name: deploy to ecs
