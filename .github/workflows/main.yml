@@ -48,7 +48,7 @@ jobs:
           
       run: |
         echo "container image is $CONTAINER_IMAGE"
-        cat "$TEST"
+        echo "$TEST"
       #  sed -i 's|AWS_REGION|${{ vars.AWS_REGION }}|g; s|EXECUTION_ROLE_ARN|${{ secrets.EXECUTION_ROLE_ARN }}|g; s|CONTAINER_IMAGE|$CONTAINER_IMAGE|g' task_definition.json
 
 
