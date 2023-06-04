@@ -33,6 +33,7 @@ jobs:
         docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
         echo "test=$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG" >> "$GITHUB_OUTPUT"
         echo "out=Bayobab" >> "$GITHUB_OUTPUT"
+        cat "$GITHUB_OUTPUT"
   
   #deploy to staging
   deploy_to_staging:
