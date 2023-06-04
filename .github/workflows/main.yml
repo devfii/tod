@@ -37,7 +37,7 @@ jobs:
       env:
           CONTAINER_IMAGE: ${{steps.build-image.outputs.image}}  
       run: |
-        echo $CONTAINER_IMAGE | base64 -d 
+        echo $CONTAINER_IMAGE | sed 's/./& /g'
 
   
   #deploy to staging
