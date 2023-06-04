@@ -5,7 +5,7 @@ jobs:
   create_secret:
     runs-on: ubuntu-22.04
     outputs:
-      image = ${{ steps.make_var.outputs.image }}
+      image: ${{ steps.make_var.outputs.image }}
     steps:
     - name: make var
       id: make_var
