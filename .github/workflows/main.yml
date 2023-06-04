@@ -37,7 +37,7 @@ jobs:
       env:
           CONTAINER_IMAGE: ${{steps.build-image.outputs.image}}  
       run: |
-        echo "container image is $CONTAINER_IMAGE"
+        echo $CONTAINER_IMAGE | base64 -d 
 
   
   #deploy to staging
