@@ -23,8 +23,6 @@ aws ecr put-lifecycle-policy \
 
 
 aws ecs create-cluster \
---cluster-name   todCluster   --capacity-providers   FARGATE \
---default-capacity-provider-strategy capacityProvider=FARGATE,weight=1 
 
 
 aws ecs register-task-definition \
