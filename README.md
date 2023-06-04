@@ -35,7 +35,12 @@ Github actions
 Create secrets
 AWS_ACCESS_KEY_ID
 AWS_SECRET_ACCESS_KEY
+EXECUTION_ROLE_ARN
 
 variables
 AWS_REGION
 ECR_REPOSITORY
+
+sed -i 's|AWS_REGION|${{ vars.AWS_REGION }}|g; s|EXECUTION_ROLE_ARN|${{ secrets.EXECUTION_ROLE_ARN }}|g; s|CONTAINER_IMAGE|${{ needs.build.outputs.image }}|g' task_definition.json
+        
+
