@@ -43,9 +43,7 @@ jobs:
       uses: actions/checkout@v3
     - name: find and replace task definition values
       run: |
-        sed -i 's/AWS_REGION/${{ vars.AWS_REGION }}/' task_definition.json
-        sed -i 's/EXECUTION_ROLE_ARN/${{ secrets.EXECUTION_ROLE_ARN }}/' task_definition.json
-        sed -i 's/CONTAINER_IMAGE/${{ needs.build.outputs.image }}/' task_definition.json
+        sed -i 's/AWS_REGION/${{ vars.AWS_REGION }}/g' task_definition.json
         cat task_definition.json
       
   #deploy to prod
