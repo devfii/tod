@@ -59,14 +59,13 @@ jobs:
         task-definition: task_definition.json
         container-name: tod
         image: ${{ steps.image-tag.outputs.image }}
-    
-    - name: deploy to ecs
+    - name: Deploy Amazon ECS task definition
       uses: aws-actions/amazon-ecs-deploy-task-definition@v1
       with:
-        task-definition: task_definition.json
-        cluster: todCluster
+        task-definition: ${{ steps.task-def.outputs.task-definition }}
         service: todService
-   
+        cluster: todCluster
+
 
 
       
