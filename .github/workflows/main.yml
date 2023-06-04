@@ -48,7 +48,7 @@ jobs:
       env:
           CONTAINER_IMAGE: ${{needs.build.outputs.image}}  
       run: |
-        sed -i 's|AWS_REGION|${{ vars.AWS_REGION }}|g; s|EXECUTION_ROLE_ARN|${{ secrets.EXECUTION_ROLE_ARN }}|g; s|CONTAINER_IMAGE|"$CONTAINER_IMAGE" |g' task_definition.json
+        sed -i 's|AWS_REGION|${{ vars.AWS_REGION }}|g; s|EXECUTION_ROLE_ARN|${{ secrets.EXECUTION_ROLE_ARN }}|g; s|CONTAINER_IMAGE|$CONTAINER_IMAGE.|g' task_definition.json
         cat task_definition.json
 
 
