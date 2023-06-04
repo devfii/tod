@@ -9,6 +9,7 @@ jobs:
     runs-on: ubuntu-22.04
     outputs:
       image: ${{ steps.build-image.outputs.image }}
+      test: ${{ steps.build-image.outputs.test }}
     steps:
     - name: checkout main branch
       uses: actions/checkout@v3
@@ -31,6 +32,7 @@ jobs:
         docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
         docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
         echo "image=$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG" >> "$GITHUB_OUTPUT"
+        echo "test=Bayobab" >> "$GITHUB_OUTPUT"
   
   #deploy to staging
   deploy_to_staging:
@@ -42,9 +44,11 @@ jobs:
     - name: find and replace task definition values
       env:
           CONTAINER_IMAGE: ${{needs.build.outputs.image}}
+          TEST: ${{needs.build.outputs.test}}
+          
       run: |
         echo "container image is $CONTAINER_IMAGE"
-        cat "$GITHUB_OUTPUT"
+        cat "$TEST"
       #  sed -i 's|AWS_REGION|${{ vars.AWS_REGION }}|g; s|EXECUTION_ROLE_ARN|${{ secrets.EXECUTION_ROLE_ARN }}|g; s|CONTAINER_IMAGE|$CONTAINER_IMAGE|g' task_definition.json
 
 
