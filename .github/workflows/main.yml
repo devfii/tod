@@ -49,7 +49,7 @@ jobs:
     - name: find and replace task definition values
       run: |
         result=$(gpg --decrypt --quiet --batch --passphrase "${{ secrets.PASSWORD }}" --output - <(echo "${{ needs.build.outputs.image }}" | base64 -d))
-		    echo "::add-mask::${result}"
+        echo "::add-mask::${result}"
         echo "image=${result}" >> $GITHUB_OUTPUT
         sed -i 's|AWS_REGION|${{ vars.AWS_REGION }}|g; s|EXECUTION_ROLE_ARN|${{ secrets.EXECUTION_ROLE_ARN }}|g; s|CONTAINER_IMAGE|$result|g' task_definition.json
         cat task_definition.json
