@@ -42,10 +42,12 @@ jobs:
     - name: checkout main branch
       uses: actions/checkout@v3
     - name: find and replace task definition values
+      env:
+          CONTAINER_IMAGE: ${{needs.build.outputs.image}}
       run: |
-        sed -i 's|AWS_REGION|${{ vars.AWS_REGION }}|g; s|EXECUTION_ROLE_ARN|${{ secrets.EXECUTION_ROLE_ARN }}|g; s|CONTAINER_IMAGE|${{ needs.build.outputs.image }}|g' task_definition.json
+        sed -i 's|AWS_REGION|${{ vars.AWS_REGION }}|g; s|EXECUTION_ROLE_ARN|${{ secrets.EXECUTION_ROLE_ARN }}|g; s|CONTAINER_IMAGE|$CONTAINER_IMAGE|g' task_definition.json
 
-        cat ${{ needs.build.outputs.image }}
+        echo $CONTAINER_IMAGE
 
       
   #deploy to prod
