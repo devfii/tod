@@ -50,9 +50,9 @@ jobs:
         echo $result
         echo "::add-mask::${result}"
         echo $result
-        sed -i 's|AWS_REGION|${{ vars.AWS_REGION }}|g; s|EXECUTION_ROLE_ARN|${{ secrets.EXECUTION_ROLE_ARN }}|g; s|CONTAINER_IMAGE|$result|g' task_definition.json
+        sed -i 's|AWS_REGION|${{ vars.AWS_REGION }}|g; s|EXECUTION_ROLE_ARN|${{ secrets.EXECUTION_ROLE_ARN }}|g; s|CONTAINER_IMAGE|${result}|g' task_definition.json
         cat task_definition.json
-        echo "image=${result}" >> $GITHUB_OUTPUT
+
       
 
 
