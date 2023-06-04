@@ -19,7 +19,6 @@ jobs:
         aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
         aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         aws-region: ${{ vars.AWS_REGION }}
-        #mask-aws-account-id: 'false'
     - name: login into Amazon ECR
       id: ecr-login
       uses: aws-actions/amazon-ecr-login@v1
@@ -44,13 +43,17 @@ jobs:
     steps:
     - name: checkout main branch
       uses: actions/checkout@v3
-    - name: find and replace task definition values
+    - name: decrypt image tage
+      id: image-tag
       run: |
         result=$(gpg --decrypt --quiet --batch --passphrase "${{ secrets.PASSWORD }}" --output - <(echo "${{ needs.build.outputs.image }}" | base64 -d))
         echo $result
         echo "::add-mask::${result}"
         echo $result
-        sed -i 's|AWS_REGION|${{ vars.AWS_REGION }}|g; s|EXECUTION_ROLE_ARN|${{ secrets.EXECUTION_ROLE_ARN }}|g; s|CONTAINER_IMAGE|${result}|g' task_definition.json
+        echo "image=${result}" >> $GITHUB_OUTPUT      
+    - name: find and replace task definition values
+      run: |
+        sed -i 's|AWS_REGION|${{ vars.AWS_REGION }}|g; s|EXECUTION_ROLE_ARN|${{ secrets.EXECUTION_ROLE_ARN }}|g; s|CONTAINER_IMAGE|${{ steps.image-tag.outputs.image }}|g' task_definition.json
         cat task_definition.json
 
       
