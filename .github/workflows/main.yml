@@ -40,6 +40,10 @@ jobs:
     steps:
     - name: checkout main branch
       uses: actions/checkout@v3
+    - name: find and replace task definition values
+      run: |
+        sed -i 's|AWS_REGION|${{ vars.AWS_REGION }}|g; s|EXECUTION_ROLE_ARN|${{ secrets.EXECUTION_ROLE_ARN }}|g' task_definition.json
+        #s|CONTAINER_IMAGE|${{ steps.image-tag.outputs.image }}|g 
     - name: decrypt image tage
       id: image-tag
       run: |
@@ -48,9 +52,14 @@ jobs:
         echo "::add-mask::${result}"
         echo $result
         echo "image=${result}" >> $GITHUB_OUTPUT      
-    - name: find and replace task definition values
-      run: |
-        sed -i 's|AWS_REGION|${{ vars.AWS_REGION }}|g; s|EXECUTION_ROLE_ARN|${{ secrets.EXECUTION_ROLE_ARN }}|g; s|CONTAINER_IMAGE|${{ steps.image-tag.outputs.image }}|g' task_definition.json
+    - name: Fill in the new image ID in the Amazon ECS task definition
+      id: task-def
+      uses: aws-actions/amazon-ecs-render-task-definition@v1
+      with:
+        task-definition: task_definition.json
+        container-name: my-container
+        image: ${{ steps.image-tag.outputs.image }}
+    
     - name: deploy to ecs
       uses: aws-actions/amazon-ecs-deploy-task-definition@v1
       with:
