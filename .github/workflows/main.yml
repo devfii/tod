@@ -1,9 +1,7 @@
 name: CI/CD for TOD app
 on:
-  #push:
-  #  branches: ["main"]
-  workflow_dispatch
-  
+  push:
+    branches: ["main"]
 jobs:
   #build app, test and push to ecr
   build:
@@ -35,7 +33,6 @@ jobs:
         docker build -t $image .
         docker push $image
         echo "image=${result}" >> $GITHUB_OUTPUT
-
   #deploy to staging
   deploy_to_staging:
     runs-on: ubuntu-22.04
@@ -54,7 +51,12 @@ jobs:
     - name: find and replace task definition values
       run: |
         sed -i 's|AWS_REGION|${{ vars.AWS_REGION }}|g; s|EXECUTION_ROLE_ARN|${{ secrets.EXECUTION_ROLE_ARN }}|g; s|CONTAINER_IMAGE|${{ steps.image-tag.outputs.image }}|g' task_definition.json
-        cat task_definition.json
+    - name: deploy to ecs
+      uses: aws-actions/amazon-ecs-deploy-task-definition@v1
+      with:
+        task-definition: task_definition.json
+   
+
 
       
 
