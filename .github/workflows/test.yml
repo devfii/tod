@@ -1,0 +1,19 @@
+name: test workflow
+on:
+  workflow_dispatch
+jobs:
+  create_secret:
+    runs-on: ubuntu-22.04
+    outputs:
+      image = ${{ steps.make_var.outputs.image }}
+    steps:
+    - name: make var
+      id: make_var
+      run: echo "image=blahblah" >> $GITHUB_OUTPUT
+    
+  use_secret:
+    runs-on: ubuntu-22.04
+    needs: create_secret
+    steps:
+    - name: use var
+      run: echo ${{ needs.create_secret.outputs.image}}
