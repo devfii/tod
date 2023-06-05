@@ -14,6 +14,8 @@ aws configure
 3. Create VPC and networking resources
 aws cloudformation create-stack --stack-name todstack --template-body file://aws/vpc.yaml
 
++loadbalancer and security groups
+
 3. Create repo
 aws ecr create-repository \
     --repository-name tod
