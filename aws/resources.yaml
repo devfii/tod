@@ -83,18 +83,61 @@ Resources:
         IpProtocol: "tcp"
         ToPort: 8000
     
-   ApplicationLoadBalancer:
-        Type: "AWS::ElasticLoadBalancingV2::LoadBalancer"
-        Properties:
-            Name: "test-Application-Load-Balancer"
-            Scheme: "internet-facing"
-            Type: "application"
-            Subnets: 
-            - !Ref SubnetA
-            - !Ref SubnetB
-            - !Ref SubnetC
-            SecurityGroups: 
-            - !Ref LBSecurityGroup
-            IpAddressType: "ipv4"
+  ApplicationLoadBalancer:
+    Type: "AWS::ElasticLoadBalancingV2::LoadBalancer"
+    DependsOn: InternetGateway
+    Properties:
+      Name: "todALB"
+      Scheme: "internet-facing"
+      Type: "application"
+      Subnets: 
+      - !Ref SubnetA
+      - !Ref SubnetB
+      - !Ref SubnetC
+      SecurityGroups: 
+      - !Ref LBSecurityGroup
+      IpAddressType: "ipv4"
+
+  HTTPListener:
+    Type: "AWS::ElasticLoadBalancingV2::Listener"
+    Properties:
+      LoadBalancerArn: !Ref ApplicationLoadBalancer
+      Port: 80
+      Protocol: "HTTP"
+      DefaultActions: 
+      - TargetGroupArn: !Ref todTargetGroup
+        Type: forward
+
+      DefaultActions: 
+      - Order: 1
+        ForwardConfig: 
+          TargetGroups: 
+          - TargetGroupArn: !Ref todTargetGroup
+            Weight: 1
+          TargetGroupStickinessConfig: 
+            Enabled: false
+        Type: forward
+
+  todTargetGroup:
+    Type: "AWS::ElasticLoadBalancingV2::TargetGroup"
+    Properties:
+      HealthCheckIntervalSeconds: 30
+      HealthCheckPath: "/"
+      Port: 8000
+      Protocol: "HTTP"
+      HealthCheckPort: "traffic-port"
+      HealthCheckProtocol: "HTTP"
+      HealthCheckTimeoutSeconds: 5
+      UnhealthyThresholdCount: 2
+      TargetType: "ip"
+      Matcher: 
+        HttpCode: "200"
+      HealthyThresholdCount: 5
+      VpcId: !Ref VPC
+      Name: "todTargetGroup"
+      HealthCheckEnabled: true
+
+
+
 
         
