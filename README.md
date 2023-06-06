@@ -13,6 +13,7 @@ aws configure
 
 3. Create VPC and networking resources
 aws cloudformation create-stack --stack-name todstack --template-body file://aws/resources.yaml
+aws cloudformation create-stack --stack-name repostack --template-body file://aws/containers.yaml --capabilities CAPABILITY_NAMED_IAM
 
 +loadbalancer and security groups
 
@@ -76,6 +77,3 @@ aws ecs delete-cluster \
 4. delete repository
 
 delete log group
-
-
-

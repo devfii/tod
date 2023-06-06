@@ -6,7 +6,7 @@
          "logConfiguration": { 
             "logDriver": "awslogs",
             "options": { 
-               "awslogs-group" : "/ecs/fargate-task-definition",
+               "awslogs-group" : "/ecs/todTaskDef",
                "awslogs-region": "AWS_REGION",
                "awslogs-stream-prefix": "ecs"
             }

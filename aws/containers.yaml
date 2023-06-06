@@ -1,0 +1,79 @@
+AWSTemplateFormatVersion: 2010-09-09
+Resources:
+  todRepository:
+    Type: AWS::ECR::Repository
+    Properties:
+      RepositoryName: tod
+      EncryptionConfiguration: 
+        EncryptionType: KMS 
+      ImageScanningConfiguration: 
+        ScanOnPush: false
+      ImageTagMutability: MUTABLE
+      LifecyclePolicy: 
+        LifecyclePolicyText: |
+          {
+            "rules": [
+                {
+                    "rulePriority": 1,
+                    "description": "Ensure there are not more than 5 images in the repository",
+                    "selection": {
+                        "tagStatus": "any",
+                        "countType": "imageCountMoreThan",
+                        "countNumber": 5
+                    },
+                    "action": {
+                        "type": "expire"
+                    }
+                }
+            ]
+          } 
+      RepositoryPolicyText: |
+        {
+          "Version": "2012-10-17",
+          "Statement": [
+              {
+                "Sid": "AllowPushPull",
+                "Effect": "Allow",
+                "Principal": {
+                  "AWS": "arn:aws:iam::173706373490:user/github"
+                  
+                },
+                "Action": [
+                      "ecr:BatchGetImage",
+                      "ecr:BatchCheckLayerAvailability",
+                      "ecr:CompleteLayerUpload",
+                      "ecr:GetDownloadUrlForLayer",
+                      "ecr:InitiateLayerUpload",
+                      "ecr:PutImage",
+                      "ecr:UploadLayerPart"
+                ]
+              }
+          ]
+        }
+  todLogGroup: 
+    Type: AWS::Logs::LogGroup
+    Properties: 
+      RetentionInDays: 1
+      LogGroupName: /ecs/todTaskDef
+
+  ecsTaskExecutionRole:
+    Type: 'AWS::IAM::Role'
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service:
+                - ecs-tasks.amazonaws.com
+            Action:
+              - 'sts:AssumeRole'
+      Path: /
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/service-role/AmazonECSTaskExecutionRolePolicy
+
+Outputs:    
+  RepositoryArn:
+    Value: !GetAtt todRepository.Arn
+  ECSTaskExecutionRole:
+    Value: !GetAtt ecsTaskExecutionRole.Arn
