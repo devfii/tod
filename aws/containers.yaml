@@ -72,6 +72,36 @@ Resources:
       ManagedPolicyArns:
         - arn:aws:iam::aws:policy/service-role/AmazonECSTaskExecutionRolePolicy
 
+  todCluster:
+    Type: 'AWS::ECS::Cluster'
+    Properties:
+      ClusterName: todCluster
+      CapacityProviders:
+      - FARGATE
+      - FARGATE_SPOT
+      DefaultCapacityProviderStrategy:
+      - CapacityProvider: FARGATE
+        Weight: 1
+      - CapacityProvider: FARGATE_SPOT
+        Weight: 1
+
+  todService:
+    Type: AWS::ECS::Service
+    Properties:
+      Cluster: !Ref todCluster
+      DeploymentConfiguration:
+        MaximumPercent: 200
+        MinimumHealthyPercent: 100
+      DesiredCount: 2
+      #HealthCheckGracePeriodSeconds: !Ref HealthCheckGracePeriodSeconds
+      LoadBalancers:
+        - ContainerName: !Ref AppName
+          ContainerPort: !Ref AppContainerPort
+          LoadBalancerName: !Ref elb
+      TaskDefinition: !Ref taskdefinition
+      ServiceName: todService
+      #Role: !Ref Role
+
 Outputs:    
   RepositoryArn:
     Value: !GetAtt todRepository.Arn
