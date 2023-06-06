@@ -1,4 +1,5 @@
 AWSTemplateFormatVersion: 2010-09-09
+# Template from creating VPC, IGW, Subnets, Security Groups, Loadbalancer, Target Group
 Resources:
   VPC:
     Type: AWS::EC2::VPC
@@ -58,3 +59,42 @@ Resources:
     Properties:
       SubnetId: !Ref SubnetC
       RouteTableId: !Ref RouteTable
+  LBSecurityGroup:
+    Type: "AWS::EC2::SecurityGroup"
+    Properties:
+      GroupDescription: "Security Group for ALB"
+      GroupName: "ELB-SG"
+      VpcId: !Ref VPC
+      SecurityGroupIngress: 
+      - CidrIp: "0.0.0.0/0"
+        FromPort: 80
+        IpProtocol: "tcp"
+        ToPort: 80
+
+  TaskSecurityGroup:
+    Type: "AWS::EC2::SecurityGroup"
+    Properties:
+      GroupDescription: "Security Group for Tasks "
+      GroupName: "Task-SG"
+      VpcId: !Ref VPC
+      SecurityGroupIngress: 
+      - SourceSecurityGroupId: !Ref LBSecurityGroup
+        FromPort: 8000
+        IpProtocol: "tcp"
+        ToPort: 8000
+    
+   ApplicationLoadBalancer:
+        Type: "AWS::ElasticLoadBalancingV2::LoadBalancer"
+        Properties:
+            Name: "test-Application-Load-Balancer"
+            Scheme: "internet-facing"
+            Type: "application"
+            Subnets: 
+            - !Ref SubnetA
+            - !Ref SubnetB
+            - !Ref SubnetC
+            SecurityGroups: 
+            - !Ref LBSecurityGroup
+            IpAddressType: "ipv4"
+
+        

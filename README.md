@@ -12,7 +12,7 @@ For detailed instructions on installing AWS CLI v2  https://docs.aws.amazon.com/
 aws configure
 
 3. Create VPC and networking resources
-aws cloudformation create-stack --stack-name todstack --template-body file://aws/vpc.yaml
+aws cloudformation create-stack --stack-name todstack --template-body file://aws/resources.yaml
 
 +loadbalancer and security groups
 
