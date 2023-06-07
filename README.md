@@ -1,7 +1,8 @@
 # tod
 
+### About 
 
-## Configure AWS CLI
+### Configure AWS CLI
 1. install aws cli
 ```
 curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
@@ -14,10 +15,10 @@ For detailed instructions on installing [AWS CLI v2](https://docs.aws.amazon.com
 2. Configure AWS CLI
 aws configure
 
-## Configure IAM user for Github Actions
+### Configure IAM user for Github Actions
 
 
-## Configure AWS Resources
+### Configure AWS Resources
 
 3. Create VPC and networking resources
 ```
@@ -76,7 +77,7 @@ ECR_REPOSITORY
 sed -i 's|AWS_REGION|${{ vars.AWS_REGION }}|g; s|EXECUTION_ROLE_ARN|${{ secrets.EXECUTION_ROLE_ARN }}|g; s|CONTAINER_IMAGE|${{ needs.build.outputs.image }}|g' task_definition.json
 ```
         
-## Cleaning up
+### Cleaning up
 Tear down
 1. Delete VPC stack 
 ```
