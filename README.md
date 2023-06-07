@@ -20,25 +20,30 @@ aws configure
 ## Configure AWS Resources
 
 3. Create VPC and networking resources
+```
 aws cloudformation create-stack --stack-name todstack --template-body file://aws/resources.yaml
-aws cloudformation create-stack --stack-name repostack --template-body file://aws/containers.yaml --capabilities CAPABILITY_NAMED_IAM
-
+aws cloudformation create-stack --stack-name repostack --template-body file://aws/containers.yaml \ --capabilities CAPABILITY_NAMED_IAM
+```
 +loadbalancer and security groups
 
 3. Create repo
-aws ecr create-repository \
-    --repository-name tod
-
+```
+aws ecr create-repository --repository-name tod
+```
 4. Create ecr repository policy
+```
 aws ecr put-lifecycle-policy \
     --repository-name "tod" \
-    --lifecycle-policy-text "file://repository_policy.json"
-
+    --lifecycle-policy-text "file://aws/repository_policy.json"
+```
 5.
+```
 aws ecs create-cluster \
     --cluster-name todCluster --capacity-providers FARGATE  
+```
 
 6. create service
+```
 aws ecs create-service \
     --cluster todCluster \
     --service-name todCluster \
@@ -49,7 +54,7 @@ aws ecs create-service \
     --load-balancers
     --role
     --network-configuration "awsvpcConfiguration={subnets=[subnet-12344321],securityGroups=[sg-12344321],assignPublicIp=ENABLED}" \
-
+```
 7. create log group
 
 8. iam user
@@ -67,19 +72,22 @@ EXECUTION_ROLE_ARN
 variables
 AWS_REGION
 ECR_REPOSITORY
-
+```
 sed -i 's|AWS_REGION|${{ vars.AWS_REGION }}|g; s|EXECUTION_ROLE_ARN|${{ secrets.EXECUTION_ROLE_ARN }}|g; s|CONTAINER_IMAGE|${{ needs.build.outputs.image }}|g' task_definition.json
+```
         
 ## Cleaning up
 Tear down
 1. Delete VPC stack 
+```
 aws cloudformation delete-stack \
     --stack-name todstack
-
+```
 2. Delete cluster
+```
 aws ecs delete-cluster \
     --cluster todCluster 
-
+```
 3. Delete service
 
 4. delete repository
