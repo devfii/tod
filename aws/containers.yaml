@@ -35,7 +35,7 @@ Resources:
                 "Sid": "AllowPushPull",
                 "Effect": "Allow",
                 "Principal": {
-                  "AWS": "arn:aws:iam::173706373490:user/github"
+                  "AWS": "arn:aws:iam::*:user/github"
                   
                 },
                 "Action": [
